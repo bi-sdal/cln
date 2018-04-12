@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'wagtailtinymce',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -172,8 +173,15 @@ BOWER_PATH = os.path.join(BASE_DIR, 'node_modules/bower/bin/bower')
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "SDAL Collaborative Lab Notebook"
+WAGTAIL_SITE_NAME = "SDAL CLN"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://example.com'
+
+
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    'default': {
+        'WIDGET': 'wagtailtinymce.rich_text.TinyMCERichTextArea'
+    },
+}
