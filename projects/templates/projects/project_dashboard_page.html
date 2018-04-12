@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-projectsindexpage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+
+    <h6>
+        <span class="glyphicon glyphicon-user"></span>
+        {% for researcher in page.project_structure.researchers.all %}
+        {{researcher}}{%if not forloop.last%}, {%endif%}
+        {% endfor %}
+    </h6>
+    <h6>
+        <span class="glyphicon glyphicon-folder-open"></span>
+         {{page.project_structure.shared_drive}}; 
+        <span class="glyphicon glyphicon-globe"></span>
+         {{page.project_structure.git_repo}}           
+    </h6>
+
+    <h5>Abstract: </h5>
+    <div class="intro">{{ page.intro|richtext }}</div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Project Options</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Add Notes</h6>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Meeting Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Literature Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Data Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Analysis Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Publication Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Blank Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add Section</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add Link</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add File</p></button>
+            <p><a href="#" class="card-link">More Options</a></p>
+        </div>
+    </div>
+
+    <div id="modal" class="modal" tabindex="-1" role="dialog"></div>    
+    
+    <h5>Notes</h5>
+    {% for meeting in page.get_meetings %} 
+        <div class="card">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{meeting.get_url}}">{{meeting}}</a></h5>
+            <p>{{meeting.intro|safe}}</p>
+        </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" >
+$('#modal').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    $.ajax({
+        url: "{% url 'meeting-add' project=page.project_structure.pk pageId=page.pk %}",
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
+</script>
+{% endblock %}

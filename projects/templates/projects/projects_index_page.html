@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block body_class %}template-projectsindexpage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+
+    <div class="intro">{{ page.intro|richtext }}</div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Project Options</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Add or Manage Your Projects</h6>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Add Project</p></button>
+            <button type="button" class="btn btn-outline-primary"><span class="glyphicon glyphicon-pencil"></span><p>Manage</p></button>
+            <p><a href="#" class="card-link">More Options</a></p>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
+
+<div class="row">
+<div class="col-6">
+    <div class="card">
+        <h5 class="card-header">Projects</h5>
+        <div class="card-body">
+            <ul class="list-unstyled">
+            {% for post in page.get_children %}
+            
+                <li class="media project">
+                    <img class="mr-3 thumbnail" src="{% static 'img/project-default.png' %}" alt="Generic placeholder image">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1"><a href="{% pageurl post %}">{{ post.title }}</a></h5>
+                        {{ post.specific.intro | richtext }}
+                    </div>
+                </li>            
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="col-6">
+    <div class="card">
+        <h5 class="card-header">Updates</h5>
+        <div class="card-body">
+                {% for post in page.updates %}
+                <li class="media update">
+                    <img class="mr-3 thumbnail" src="{% static 'img/note-default.png' %}" alt="Generic placeholder image">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1"><a href="{% pageurl post %}">{{ post.title }}</a></h5>
+                        {{ post.specific.intro | richtext }}
+                    </div>
+                </li>            
+            {% endfor %}
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_css %}
+<style type="text/css">
+.project {
+    height: 80px;
+    cursor: pointer;
+    overflow: hidden;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.update {
+    height: 80px;
+    cursor: pointer;
+    overflow: hidden;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" >
+$('#modal').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    $.ajax({
+        url: "{% url 'project-add' pageId=page.pk %}",
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
+</script>
+
+{% endblock %}

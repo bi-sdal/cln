@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-projectsindexpage{% endblock %}
+
+{% block content %}
+
+    <h1>{{ page.title }}</h1>
+
+    <div class="intro">{{ page.intro|richtext }}</div>
+
+    <table summary="" class="table table-condensed">
+        <tr>
+            <th>Name</th>
+            <th>E-mail</th>
+        </tr>
+        {% for researcher in page.project_structure.researchers.all %}
+            <tr>
+                <td>{{researcher}}</td>
+                <td>{{researcher.email}}</td>           
+            </tr>
+        {% endfor %}
+    </table>
+
+    {{page.project_structure.researchers_set.all}}
+
+{% endblock %}

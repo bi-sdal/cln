@@ -1,0 +1,7 @@
+*.ipynb
+*~
+*.swp
+*.pyc
+/node_modules/
+/components/
+db.sqlite3

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Projects</h2>
+    <ul>
+        {% for project in object_list %}
+            <li>{{ project.title }} - {{project.researchers}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

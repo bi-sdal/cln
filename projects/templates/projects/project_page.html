@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-projectsindexpage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+
+    <h2>This is a project.</h2>
+
+    <div class="intro">{{ page.intro|richtext }}</div>
+
+{% endblock %}

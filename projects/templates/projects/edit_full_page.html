@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load staticfiles wagtailadmin_tags wagtailcore_tags crispy_forms_tags i18n %}
+
+
+{% block content %}
+<form id="addForm" action="" method="post">{% csrf_token %}
+{{form | crispy}}
+
+<input class="btn btn-primary" type="submit" value="Save" />
+</form>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'wagtailadmin/css/core.css' %}" type="text/css" />
+    {{form.media.css}}
+{% endblock %}
+
+{% block js_before_content %}
+    <script>
+        (function(document, window) {
+            window.wagtailConfig = window.wagtailConfig || {};
+            wagtailConfig.STRINGS = {
+                EDIT: "{% trans 'Edit' %}",
+                DELETE: "{% trans 'Delete' %}",
+                PAGE: "{% trans 'Page' %}",
+                PAGES: "{% trans 'Pages' %}",
+                LOADING: "{% trans 'Loading…' %}",
+                NO_RESULTS: "{% trans 'No results' %}",
+                SERVER_ERROR: "{% trans 'Server Error' %}",
+                SEE_CHILDREN: "{% trans 'See children' %}",
+                SEE_ALL: "{% trans 'See all' %}",
+                CLOSE_EXPLORER: "{% trans 'Close explorer' %}",
+                ALT_TEXT: "{% trans 'Alt text' %}",
+                WRITE_HERE: "{% trans 'Write here…' %}",
+                HORIZONTAL_LINE: "{% trans 'Horizontal line' %}",
+                LINE_BREAK: "{% trans 'Line break' %}",
+                UNDO: "{% trans 'Undo' %}",
+                REDO: "{% trans 'Redo' %}",
+                RELOAD_PAGE: "{% trans 'Reload the page' %}",
+                RELOAD_EDITOR: "{% trans 'Reload saved content' %}",
+                SHOW_LATEST_CONTENT: "{% trans 'Show latest content' %}",
+                SHOW_ERROR: "{% trans 'Show error' %}",
+                EDITOR_CRASH: "{% trans 'The editor just crashed. Content has been reset to the last saved version.' %}",
+            };
+        })(document, window);
+    </script>
+    <script src="{% static 'wagtailadmin/js/vendor.js' %}"></script>
+    {{form.media.js}}    
+    
+{% endblock %}
+
+
+

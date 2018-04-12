@@ -1,0 +1,19 @@
+html {height: 100%;}
+
+body {
+	background-image: url("/static/img/background-morning.jpg");
+	background-size: cover;
+	background-attachment: fixed;
+	height: 100%;
+}
+
+.container {
+	background-color: #ffffffaa;
+	min-height: 100%;
+	padding-top: 70px;
+}
+
+.thumbnail {
+    height: 60px;
+    width: 60px;
+}

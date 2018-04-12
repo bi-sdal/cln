@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}template-projectsmeetingpage{% endblock %}
+
+{% block content %}
+    {% include_block page.body %}
+{% endblock %}
+
+
+{% block extra_css %}
+{% endblock %}
+
+
+{% block extra_js %}
+{% endblock %}
