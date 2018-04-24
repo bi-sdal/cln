@@ -103,7 +103,7 @@ class TinyMCERichTextArea(WidgetWithScript, widgets.Textarea):
         }
 
     def __init__(self, attrs=None, **kwargs):
-	translation.trans_real.activate(settings.LANGUAGE_CODE)
+        translation.trans_real.activate(settings.LANGUAGE_CODE)
         super(TinyMCERichTextArea, self).__init__(attrs)
         self.kwargs = self.getDefaultArgs()
         if kwargs is not None:
