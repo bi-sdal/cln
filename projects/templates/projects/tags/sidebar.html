@@ -1,0 +1,47 @@
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">               
+  <span>Your Projects</span>
+  <a class="d-flex align-items-center text-muted" href="#">
+    <span data-feather="plus-circle"></span>
+  </a>
+</h6>
+
+<ul class="nav navbar-nav">
+{% for project in projects %}
+  <li class="nav-item dropdown">
+    <a class="nav-link" href="{{ project.url }}">
+      <span data-feather="home"></span>
+      {{ project.title }} <span class="sr-only">(current)</span>
+    </a>
+    <div id="demo" class="collapse">
+        <ul class="nav dropdown-toggle">
+            <li class="nav-item">Meetings<li>
+            <li class="nav-item">People<li>
+        </ul>
+    </div>
+  </li>
+{% endfor %}
+</ul>
+
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">               
+  <span>All Projects</span>
+  <a class="d-flex align-items-center text-muted" href="#">
+    <span data-feather="plus-circle"></span>
+  </a>
+</h6>
+
+<ul class="nav navbar-nav">
+{% for project in projects %}
+  <li class="nav-item dropdown">
+    <a class="nav-link" href="{{ project.url }}">
+      <span data-feather="home"></span>
+      {{ project.title }} <span class="sr-only">(current)</span>
+    </a>
+    <div id="demo" class="collapse">
+        <ul class="nav dropdown-toggle">
+            <li class="nav-item">Meetings<li>
+            <li class="nav-item">People<li>
+        </ul>
+    </div>
+  </li>
+{% endfor %}
+</ul>

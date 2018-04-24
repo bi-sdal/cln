@@ -10,20 +10,27 @@ from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-
+from wagtail.snippets.models import register_snippet
 from project_structure.models import Project, Researcher, Meeting
 
 # Create your models here.
+
+@register_snippet
+class Sidebar(models.Model):
+    pass
+
 class ProjectsIndexPage(Page):
     intro = RichTextField(blank=True)
 
-    updates = Page.objects.all().order_by('-last_published_at')
     project_structure = models.ForeignKey(Project, on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname="full"),
         FieldPanel('project_structure', classname="full"),
     ]
+    
+    def updates(self):
+        return Page.objects.all().order_by('-last_published_at')
 
 class ProjectPage(Page):
     intro = RichTextField(blank=True)

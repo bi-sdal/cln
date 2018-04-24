@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load staticfiles crispy_forms_tags %}
+
+{% block content %}
+
+<div class="form-container">
+<img style="display: inline-block;" src="{% static 'img/sdal-logo.png' %}" alt="">
+<br>
+  <h4>Sign into the SDAL Collaborative Lab Notebook</h4>
+  <br>
+  <form class="form-group" method="post">
+    {% csrf_token %}
+    <div id="div_id_username" class="control-group"> 
+        <div class="controls"> 
+            <input type="text" placeholder="Your User Name" name="username" autofocus maxlength="254" class="textinput textInput login" id="id_username" required /> 
+        </div> 
+    </div> 
+    <div id="div_id_password" class="control-group">
+        <div class="controls"> 
+            <input type="password" placeholder="Password" name="password" id="id_password" class="textinput textInput login" required /> 
+        </div> 
+    </div>
+    <br>
+    <button class="btn btn-primary" type="submit">Sign In</button>
+  </form>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+<style type="text/css">
+    .container{
+        background-color: transparent;    
+    }
+    .form-container{
+        background-color: tan;
+        background-opacity: .7;
+        align-content: center;
+        margin: 0 auto;
+        align-content:center;
+        text-align: center;
+        padding: 50px;
+        width: 500px;   
+    }
+    .form-group{
+        margin: 0 auto;
+        width: 350px;
+        text-align: left;    
+    }
+    .login{
+        width: 100%;
+        font-size: 20pt;
+        border-radius: 0;
+        border: none;   
+        border-bottom: 3px solid gray;
+        height: 100%;
+        margin-top: 10px;
+        opacity: .6; 
+    }
+</style>
+{% endblock %}

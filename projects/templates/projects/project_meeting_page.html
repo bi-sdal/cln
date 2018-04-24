@@ -4,6 +4,7 @@
 {% block body_class %}template-projectsmeetingpage{% endblock %}
 
 {% block content %}
+    <div class="note-body bg-light p-3 border border-dark">
     <h1>{{ page.title }}</h1>
     <h5>Prepared by: {% for preparor in page.meeting_structure.prepared_by.all %} {{preparor}}{% endfor %}</h5>
     <h5>Attendees: {% for attendee in page.meeting_structure.attendees.all %} {{attendee}}{% endfor %}</h5>
@@ -17,7 +18,7 @@
             {{ page.intro|richtext }}
         </div>
     </div>
-    <div class="main block bottom">
+    <div class="main-meeting block bottom">
         <h6>Meeting Notes
             <button type="button" class="btn edit-button" data-dismiss="modal" aria-label="Edit">
                 <span class="glyphicon glyphicon-pencil edit-button"></span>
@@ -27,8 +28,9 @@
             {{ page.meeting_notes|richtext }}
         </div>
     </div>
-
     <p>Last Update: {{page.last_published_at|date:'Y-m-d H:i' }}<p>
+    </div>
+    
     
 {% endblock %}
 
