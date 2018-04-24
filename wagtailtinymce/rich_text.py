@@ -34,7 +34,7 @@ from wagtail.admin.edit_handlers import RichTextFieldPanel
 from wagtail.admin.rich_text.converters.editor_html import DbWhitelister, WhitelistRule
 from wagtail.core.whitelist import attribute_rule, check_url
 from wagtail.core.rich_text import expand_db_html
-
+from django.conf import settings
 
 allow_without_attributes = attribute_rule({})
 
@@ -103,6 +103,7 @@ class TinyMCERichTextArea(WidgetWithScript, widgets.Textarea):
         }
 
     def __init__(self, attrs=None, **kwargs):
+	translation.trans_real.activate(settings.LANGUAGE_CODE)
         super(TinyMCERichTextArea, self).__init__(attrs)
         self.kwargs = self.getDefaultArgs()
         if kwargs is not None:
