@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags staticfiles %}
 
 {% block body_class %}template-projectsindexpage{% endblock %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-
+    <div class="jumbotron bg-dark text-light">
+    <h1 class="display-4">{{ page.title }}</h1>
+    <p class="lead">{{ page.intro|richtext }}</p>
+    <hr class="my-4 text-light">
     <h6>
         <span class="glyphicon glyphicon-user"></span>
         {% for researcher in page.project_structure.researchers.all %}
@@ -19,10 +21,9 @@
         <span class="glyphicon glyphicon-globe"></span>
          {{page.project_structure.git_repo}}           
     </h6>
-
-    <h5>Abstract: </h5>
-    <div class="intro">{{ page.intro|richtext }}</div>
-
+    </div>
+    
+    {% comment %}
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Project Options</h5>
@@ -39,18 +40,46 @@
             <p><a href="#" class="card-link">More Options</a></p>
         </div>
     </div>
+    {% endcomment %}
 
     <div id="modal" class="modal" tabindex="-1" role="dialog"></div>    
     
-    <h5>Notes</h5>
-    {% for meeting in page.get_meetings %} 
-        <div class="card">
-        <div class="card-body">
-            <h5 class="card-title"><a href="{{meeting.get_url}}">{{meeting}}</a></h5>
-            <p>{{meeting.intro|safe}}</p>
+    <div class="row">
+    <div class="col-9">
+        <h5><span>Project</span> Notes</h5>
+        {% for post in page.get_meetings %}
+
+        <div class="d-flex bg-light border border-dark p-2 mb-1">
+            <img class="mr-3 thumbnail" src="{% static 'img/note-default.png' %}" alt="Generic placeholder image">
+            <div class="media-body">
+                <h5 class="mt-0 mb-1"><a href="{% pageurl post %}">{{ post.title }}</a></h5>
+                        {{ post.specific.intro | richtext }}
+                        {{ post.specific.meeting_notes | richtext }}
+            </div>
         </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+    <div id="project-nav" class="col-3" style="top: -70px;">
+    <div class="sticky-top">
+    <h5>Sections <a href="#" data-toggle="tooltip" data-placement="right" title="Add Section"><span class="glyphicon glyphicon-plus" style="font-size: 10pt;"></span></a></h5>
+    <div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action active">Recent Notes</a>
+  <a href="#" class="list-group-item list-group-item-action">Meeting Notes</a>
+  <a href="#" class="list-group-item list-group-item-action">Literature Notes</a>
+  <a href="#" class="list-group-item list-group-item-action">Data Notes</a>
+  <a href="#" class="list-group-item list-group-item-action">Analysis Notes</a>
+  <a href="#" class="list-group-item list-group-item-action">Publication Notes</a>
+    </div>
+    <hr>
+    <div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action">Citations</a>
+  <a href="#" class="list-group-item list-group-item-action">Documents</a>
+  <a href="#" class="list-group-item list-group-item-action">Files</a>
+  <a href="#" class="list-group-item list-group-item-action">Project Links</a>
+    </div>
+    </div>
+    </div>
+    </div>
 
 {% endblock %}
 
@@ -65,5 +94,28 @@ $('#modal').on('show.bs.modal', function (event) {
         modal.html(response);
     });
 });
+
+/*window.onscroll = function() {stick()};
+var nav = document.getElementById("project-nav");
+var sticky = nav.offsetTop;
+function stick() {
+  if (window.pageYOffset >= sticky) {
+    nav.classList.add("fixed-top");
+  } else {
+    nav.classList.remove("fixed-top");
+  }
+} 
+*/
 </script>
+{% endblock %}
+
+{% block extra_css %}
+<style type="text/css">
+    hr { border-color: inherit }
+    .sticky-top:before {
+    height: 70px;
+    content: "";
+    display:block;
+}
+</style>
 {% endblock %}
