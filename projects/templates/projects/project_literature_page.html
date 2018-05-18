@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load staticfiles wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}template-projectsmeetingpage{% endblock %}
+
+{% block content %}
+    <div class="note-body bg-light p-3 border border-dark">
+    <h1>{{ page.title }}</h1>
+    <h5>Prepared by: {% for preparor in page.literature_structure.prepared_by.all %} {{preparor}}{% endfor %}</h5>
+    <div class="intro block">
+        <h6>Summary 
+            <button type="button" class="btn edit-button edit-style" data-dismiss="modal" aria-label="Edit">
+                <span class="glyphicon glyphicon-pencil edit-button"></span>
+            </button>
+        </h6>
+        <div id="intro" class="note-content">
+            {{ page.intro|richtext }}
+        </div>
+    </div>
+    <div class="main-literature block">
+        <h6>Literature Note
+            <button type="button" class="btn edit-button edit-style" data-dismiss="modal" aria-label="Edit">
+                <span class="glyphicon glyphicon-pencil edit-button"></span>
+            </button>
+        </h6>
+        <div id="literature_notes" class="note-content">
+            {{ page.literature_notes|richtext }}
+        </div>
+    </div>
+    <div class="citations block bottom">
+        <h6>Citations Included</h6>
+        <ol>
+            {% for citation in page.literature_structure.citations.all %}
+                <li>
+                    {{citation.long_cite}}
+                    <button type="button" class="btn edit-style modal-button" data-dismiss="modal" aria-label="Edit" url="{% url 'citation-update' pageId=page.pk pk=citation.pk %}">
+                        <span class="glyphicon glyphicon-pencil edit-button"></span>
+                    </button>
+                </li>
+            {% endfor %}
+            <li> <a href="{% url 'literature-import-bibtex' project=page.literature_structure.project.id pageId=page.id %}" >Add Citations</a> </li>
+        </ol>
+        
+    </div>
+
+    <p>Last Update: {{page.last_published_at|date:'Y-m-d H:i' }}<p>
+    </div>
+    
+    <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
+
+    
+{% endblock %}
+
+
+{% block extra_css %}
+<style type="text/css">
+    .block{
+        border-top: 1px black solid;
+        min-height: 100px;    
+    }
+    .bottom{
+        border-bottom: 1px black solid;    
+    }
+    .note-content{    
+    }
+    .edit-style{
+        background-color: transparent;
+        border: 0;
+    }
+    .edit-style:focus{
+        box-shadow: none!important;   
+    }
+    
+    .modal{
+        overflow-y: scroll;    
+    }
+</style>
+{% endblock %}
+
+
+{% block extra_js %}
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="{% static 'MathJax/MathJax.js' %}?config=TeX-AMS_CHTML">
+</script>
+<script type="text/javascript" >
+$('.edit-button').on('click', function (event) {
+    var disp = $(this).closest('.block').find('.note-content');
+    var fieldName = $(disp).attr('id');
+
+    $.ajax({
+        url: "{% routablepageurl self 'edit' %}" + fieldName,
+        context: document.body
+    }).done(function(response) {
+        disp.html(response);
+    });
+});
+
+$('.modal-button').on('click', function(event){
+    var modal = $("#modal");
+    modal.show();
+    $.ajax({
+        url: $(this).attr('url'),
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Literature Notes:</h2>
+    <ul>
+        {% for note in object_list %}
+            <li>{{note.title }} - {{note.date}}; <br> {{note.citations}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

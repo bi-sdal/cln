@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailroutablepage_tags staticfiles %}
+
+{% block body_class %}template-projectsindexpage{% endblock %}
+
+{% block content %}
+    <div class="jumbotron bg-dark text-light">
+    <h1 class="display-4">{{ page.section_name }} Notes</h1>
+    <p class="lead">{{ page.intro|richtext }}</p>
+    <hr class="my-4 text-light">
+    <h6>
+        <span class="glyphicon glyphicon-user"></span>
+        {% for researcher in page.project_structure.researchers.all %}
+        {{researcher}}{%if not forloop.last%}, {%endif%}
+        {% endfor %}
+    </h6>
+    <h6>
+        <span class="glyphicon glyphicon-folder-open"></span>
+         {{page.project_structure.shared_drive}}; 
+        <span class="glyphicon glyphicon-globe"></span>
+         {{page.project_structure.git_repo}}           
+    </h6>
+    </div>
+    
+    {% comment %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Project Options</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Add Notes</h6>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Meeting Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Literature Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Data Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Analysis Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Publication Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Blank Note</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add Section</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add Link</p></button>
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add File</p></button>
+            <p><a href="#" class="card-link">More Options</a></p>
+        </div>
+    </div>
+    {% endcomment %}
+
+    <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
+    <div id="modal-add-section" class="modal" tabindex="-1" role="dialog"></div>    
+    
+    <div class="row">
+    <div class="col-9">
+        <h5><span>{{page.section_name}}</span> Notes <a href="#" data-toggle="modal" data-target="#modal" title="Add Note"><span data-toggle="tooltip" data-placement="right" class="glyphicon glyphicon-plus" style="font-size: 10pt;"></span></a></h5>
+        {% for post in page.get_notes %}
+
+        <div class="d-flex bg-light border border-dark p-2 mb-1">
+            <img class="mr-3 thumbnail" src="{% static 'img/note-default.png' %}" alt="Generic placeholder image">
+            <div class="media-body">
+                <h5 class="mt-0 mb-1"><a href="{% pageurl post %}">{{ post.title }}</a></h5>
+                        {{ post.specific.intro | richtext }}
+                        {{ post.specific.meeting_notes | richtext }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div id="project-nav" class="col-3" style="top: -70px;">
+    <div class="sticky-top">
+    <h5>Sections <a href="#" data-toggle="modal" data-target="#modal-add-section" title="Add Section"><span data-toggle="tooltip" data-placement="right" class="glyphicon glyphicon-plus" style="font-size: 10pt;"></span></a></h5>
+    <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action active">Recent Notes</a>
+    {% for section in page.get_sections %}
+        <a href="{{section.url}}" class="list-group-item list-group-item-action">{{section}}</a>
+    {% endfor %}
+    </div>
+    <hr>
+    <div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action">Citations</a>
+  <a href="#" class="list-group-item list-group-item-action">Documents</a>
+  <a href="#" class="list-group-item list-group-item-action">Files</a>
+  <a href="#" class="list-group-item list-group-item-action">Links</a>
+  <a href="#" class="list-group-item list-group-item-action">Directory</a>
+    </div>
+    </div>
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" >
+$('#modal').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    $.ajax({
+        url: "{% url page.add_note_url project=page.project_structure.pk pageId=page.pk %}",
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
+
+$('#modal-add-section').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    $.ajax({
+        url: "",
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
+
+
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style type="text/css">
+    hr { border-color: inherit }
+    .sticky-top:before {
+    height: 70px;
+    content: "";
+    display:block;
+}
+</style>
+{% endblock %}

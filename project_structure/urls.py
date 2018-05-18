@@ -45,5 +45,6 @@ urlpatterns = [
     path(r'<int:pk>/', ProjectDetail.as_view(), name='project-detail'),
     path(r'add-list/<int:pk>/', NoteAdd.as_view(), name='add-list'),
     path(r'add-citation/<int:project>/', import_bibtex, name='import-bibtex'),
+    path(r'<int:pageId>/citation/<int:pk>/', CitationUpdate.as_view(), name='citation-update'),
     path(r'', ProjectList.as_view(), name='project-list'),
 ]

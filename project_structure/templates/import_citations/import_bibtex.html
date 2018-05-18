@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+	<div id="content-main">
+		<form method="post">
+			{% csrf_token %}
+			{{ bib }}
+			<div>
+				{% if errors %}
+				<p class="errornote">{% trans 'Please correct the errors below.' %}</p>
+				{% endif %}
+				<fieldset class="module aligned">
+					{% if errors.bibliography %}
+					<div class="form-row errors">
+						<ul class="errorlist"><li>{{ errors.bibliography }}</li></ul>
+					{% else %}
+					<div class="form-row">
+					{% endif %}
+						<div>
+							<label for="id_bibliography" class="required">{% trans 'Bibliography' %}:</label>
+							<textarea rows="20" cols="80" name="bibliography" id="id_bibliography">{{ request.POST.bibliography }}</textarea>
+							<p class="help">{% trans 'Required keys: title, author and year.' %}</p>
+						</div>
+					</div>
+				</fieldset>
+				<br>
+				<div class="submit-row">
+					<input type="submit" value="{% trans 'Import' %}" class="default button button-submit" name="_save" />
+				</div><br clear="all" />
+			</div>
+		</form>
+	</div>
+{% endblock %}

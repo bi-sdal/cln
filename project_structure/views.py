@@ -338,3 +338,40 @@ class MiscDetail(DetailView):
 class MiscList(ListView):
     model = Misc
     
+
+# Citation Edit Views
+class CitationUpdate(UpdateView):
+    model = Citation
+    fields = '__all__'
+    template_name_suffix = '_update_form'
+    
+    def form_valid(self, form):
+
+        form.save()
+        pageId = self.kwargs['pageId']
+        page = Page.objects.get(id=pageId)
+        
+        return HttpResponseRedirect(page.url)
+        
+    
+class CitationCreate(CreateView):
+    model = Citation
+    fields = '__all__'   
+            
+    def form_valid(self, form):
+        projectId = self.kwargs['project']
+        project = Project.objects.get(id=projectId)                
+        
+        self.object = form.save()
+        self.object.project = project
+        self.object.save()
+        
+        page = ProjectMiscPage(title=self.object.title, misc_structure=self.object)
+        
+        pageId = self.kwargs['pageId']       
+        parent_page = Page.objects.get(id=pageId)
+        parent_page.add_child(instance=page)
+        
+        page.save_revision().publish() 
+
+        return HttpResponseRedirect(page.url)
