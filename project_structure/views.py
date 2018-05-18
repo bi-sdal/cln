@@ -1,13 +1,26 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
+from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 from wagtail.core.models import Page
 from project_structure.models import *
 from projects.models import *
 
 # Create your views here.
+class NoteAdd(TemplateView):
+    
+    template_name = "project_structure/list_add_sections.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        parent = ProjectDashboardPage.objects.get(pk=context['pk'])
+        context['sections'] = ProjectSectionPage.objects.child_of(parent).live()
+        return context 
+    
+
 class ResearcherCreate(CreateView):
     model = Researcher
     fields = [
@@ -16,6 +29,7 @@ class ResearcherCreate(CreateView):
         'degree',
         'email',
         'website',
+        'user',
         ]
 
 class ResearcherUpdate(UpdateView):
@@ -26,6 +40,7 @@ class ResearcherUpdate(UpdateView):
         'degree',
         'email',
         'website',
+        'user',
         ]
 
 class ResearcherDelete(DeleteView):
@@ -47,19 +62,24 @@ class ProjectCreate(CreateView):
     fields = ['title', 'acronym', 'researchers', 'git_repo', 'shared_drive']    
     
     def form_valid(self, form):
-        self.object = form.save()
-
-        print (form)        
+        self.object = form.save()        
         
         #Add Page to Notebook
-        page = ProjectDashboardPage(title=form.cleaned_data['title'], project_structure = self.object)      
+        page = ProjectDashboardPage(title=form.cleaned_data['title'], intro="(place abstract here)", project_structure = self.object)      
 
         pageId = self.kwargs['pageId']       
         parent_page = Page.objects.get(id=pageId)
         parent_page.add_child(instance=page)
         page.save_revision().publish()
+        
+        #Add in Default Page Sections
+        print(self.model.default_sections)
+        for section_name in self.model.default_sections:
+            section_page = ProjectSectionPage(title=section_name, section_name=section_name)
+            page.add_child(instance=section_page)
+            section_page.save_revision().publish()
 
-        return render(self.request, 'project_structure/project_detail.html', {'project': self.object})
+        return HttpResponseRedirect(page.url)
 
 
 class ProjectUpdate(UpdateView):
@@ -82,7 +102,7 @@ class ProjectList(ListView):
 # Meeting Views
 class MeetingCreate(CreateView):
     model = Meeting
-    fields = ['date', 'prepared_by', 'project_attendees']   
+    fields = ['title', 'date', 'prepared_by', 'project_attendees']   
             
     def form_valid(self, form):
         projectId = self.kwargs['project']
@@ -92,7 +112,7 @@ class MeetingCreate(CreateView):
         self.object.project = project
         self.object.save()
         
-        page = ProjectMeetingPage(title='Meeting-{}'.format(self.object.date), meeting_structure = self.object)
+        page = ProjectMeetingPage(title=self.object.title, meeting_structure = self.object)
         
         pageId = self.kwargs['pageId']       
         parent_page = Page.objects.get(id=pageId)
@@ -100,7 +120,8 @@ class MeetingCreate(CreateView):
         
         page.save_revision().publish() 
 
-        return render(self.request, 'project_structure/meeting_detail.html', {'meeting': self.object})
+        return HttpResponseRedirect(page.url)
+
 
 class MeetingUpdate(UpdateView):
     model = Meeting
@@ -116,4 +137,204 @@ class MeetingDetail(DetailView):
     
 class MeetingList(ListView):
     model = Meeting
+    
+
+# Literature Views
+class LiteratureCreate(CreateView):
+    model = Literature
+    fields = ['title', 'citations']   
+            
+    def form_valid(self, form):
+        projectId = self.kwargs['project']
+        project = Project.objects.get(id=projectId)                
+        
+        self.object = form.save()
+        self.object.project = project
+        self.object.save()
+        
+        page = ProjectLiteraturePage(title=self.object.title, literature_structure=self.object)
+        
+        pageId = self.kwargs['pageId']       
+        parent_page = Page.objects.get(id=pageId)
+        parent_page.add_child(instance=page)
+        
+        page.save_revision().publish() 
+
+        return HttpResponseRedirect(page.url)
+
+
+class LiteratureUpdate(UpdateView):
+    model = Literature
+    fields = '__all__'
+
+class LiteratureDelete(DeleteView):
+    model = Literature
+    success_url = reverse_lazy('literature-list')
+    
+class LiteratureDetail(DetailView):
+    model = Literature
+    context_object_name = 'literature'
+    
+class LiteratureList(ListView):
+    model = Literature
+    
+    
+# Data Views
+class DataCreate(CreateView):
+    model = Data
+    fields = ['title']   
+            
+    def form_valid(self, form):
+        projectId = self.kwargs['project']
+        project = Project.objects.get(id=projectId)                
+        
+        self.object = form.save()
+        self.object.project = project
+        self.object.save()
+        
+        page = ProjectDataPage(title=self.object.title, data_structure=self.object)
+        
+        pageId = self.kwargs['pageId']       
+        parent_page = Page.objects.get(id=pageId)
+        parent_page.add_child(instance=page)
+        
+        page.save_revision().publish() 
+
+        return HttpResponseRedirect(page.url)
+
+
+class DataUpdate(UpdateView):
+    model = Data
+    fields = '__all__'
+
+class DataDelete(DeleteView):
+    model = Data
+    success_url = reverse_lazy('data-list')
+    
+class DataDetail(DetailView):
+    model = Data
+    context_object_name = 'data'
+    
+class DataList(ListView):
+    model = Data
+    
+    
+# Analysis Views
+class AnalysisCreate(CreateView):
+    model = Analysis
+    fields = ['title']   
+            
+    def form_valid(self, form):
+        projectId = self.kwargs['project']
+        project = Project.objects.get(id=projectId)                
+        
+        self.object = form.save()
+        self.object.project = project
+        self.object.save()
+        
+        page = ProjectAnalysisPage(title=self.object.title, analysis_structure=self.object)
+        
+        pageId = self.kwargs['pageId']       
+        parent_page = Page.objects.get(id=pageId)
+        parent_page.add_child(instance=page)
+        
+        page.save_revision().publish() 
+
+        return HttpResponseRedirect(page.url)
+
+
+class AnalysisUpdate(UpdateView):
+    model = Analysis
+    fields = '__all__'
+
+class AnalysisDelete(DeleteView):
+    model = Analysis
+    success_url = reverse_lazy('analysis-list')
+    
+class AnalysisDetail(DetailView):
+    model = Analysis
+    context_object_name = 'analysis'
+    
+class AnalysisList(ListView):
+    model = Analysis
+    
+    
+# Publication Views
+class PublicationCreate(CreateView):
+    model = Publication
+    fields = ['title']   
+            
+    def form_valid(self, form):
+        projectId = self.kwargs['project']
+        project = Project.objects.get(id=projectId)                
+        
+        self.object = form.save()
+        self.object.project = project
+        self.object.save()
+        
+        page = ProjectPublicationPage(title=self.object.title, publication_structure=self.object)
+        
+        pageId = self.kwargs['pageId']       
+        parent_page = Page.objects.get(id=pageId)
+        parent_page.add_child(instance=page)
+        
+        page.save_revision().publish() 
+
+        return HttpResponseRedirect(page.url)
+
+
+class PublicationUpdate(UpdateView):
+    model = Publication
+    fields = '__all__'
+
+class PublicationDelete(DeleteView):
+    model = Publication
+    success_url = reverse_lazy('publication-list')
+    
+class PublicationDetail(DetailView):
+    model = Publication
+    context_object_name = 'publication'
+    
+class PublicationList(ListView):
+    model = Publication
+    
+    
+# Miscellaneous Views
+class MiscCreate(CreateView):
+    model = Misc
+    fields = ['title']   
+            
+    def form_valid(self, form):
+        projectId = self.kwargs['project']
+        project = Project.objects.get(id=projectId)                
+        
+        self.object = form.save()
+        self.object.project = project
+        self.object.save()
+        
+        page = ProjectMiscPage(title=self.object.title, misc_structure=self.object)
+        
+        pageId = self.kwargs['pageId']       
+        parent_page = Page.objects.get(id=pageId)
+        parent_page.add_child(instance=page)
+        
+        page.save_revision().publish() 
+
+        return HttpResponseRedirect(page.url)
+
+
+class MiscUpdate(UpdateView):
+    model = Misc
+    fields = '__all__'
+
+class MiscDelete(DeleteView):
+    model = Misc
+    success_url = reverse_lazy('miscellaneous-list')
+    
+class MiscDetail(DetailView):
+    model = Misc
+    context_object_name = 'misc'
+    
+class MiscList(ListView):
+    model = Misc
     

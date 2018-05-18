@@ -7,5 +7,6 @@ register = template.Library()
 def sidebar(context):
     return {
         'projects': ProjectDashboardPage.objects.order_by('title').all(),
+        'user': context['user'],
         'request': context['request'],
     }

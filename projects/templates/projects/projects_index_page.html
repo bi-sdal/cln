@@ -7,7 +7,7 @@
 {% block content %}
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Project Options</h5>
+            <h5 class="card-title">Notes Last Visited</h5>
             <h6 class="card-subtitle mb-2 text-muted">Add or Manage Your Projects</h6>
             <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Add Project</p></button>
             <button type="button" class="btn btn-outline-primary"><span class="glyphicon glyphicon-pencil"></span><p>Manage</p></button>
@@ -18,43 +18,18 @@
     <!-- Modals -->
     <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
 
-
-<!--
-<div class="col-6">
-    <div class="card">
-        <h5 class="card-header">Projects</h5>
-        <div class="card-body">
-            <ul class="list-unstyled">
-            {% for post in page.get_children %}
-            
-                <li class="media project">
-                    <img class="mr-3 thumbnail" src="{% static 'img/project-default.png' %}" alt="Generic placeholder image">
-                    <div class="media-body">
-                        <h5 class="mt-0 mb-1"><a href="{% pageurl post %}">{{ post.title }}</a></h5>
-                        {{ post.specific.intro | richtext }}
-                    </div>
-                </li>            
-            {% endfor %}
-            </ul>
+    <h5>Latest Updates</h5>
+    {% for post in page.updates %}
+    <div class="d-flex bg-light border border-dark p-2 mb-1">
+        <img class="mr-3 thumbnail" src="{% static 'img/note-default.png' %}" alt="Generic placeholder image">
+        <div class="media-body">
+            <h5 class="mt-0 mb-1"><a href="{% pageurl post %}">{{ post.title }}</a></h5>
+            {{ post.specific.intro | richtext }}
+            {{ post.specific.meeting_notes | richtext }}
         </div>
-    </div>
-</div>
--->
-
-<h5>Latest Updates</h5>
+    </div>            
+    {% endfor %}
         
-                {% for post in page.updates %}
-                <div class="d-flex bg-light border border-dark p-2 mb-1">
-                    <img class="mr-3 thumbnail" src="{% static 'img/note-default.png' %}" alt="Generic placeholder image">
-                    <div class="media-body">
-                        <h5 class="mt-0 mb-1"><a href="{% pageurl post %}">{{ post.title }}</a></h5>
-                        {{ post.specific.intro | richtext }}
-                        {{ post.specific.meeting_notes | richtext }}
-                    </div>
-                </div>            
-            {% endfor %}
-        
-
 {% endblock %}
 
 

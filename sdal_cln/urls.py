@@ -15,7 +15,7 @@ from search import views as search_views
 
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
-
+    url(r'^publications/', include('publications_bootstrap.urls')),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^project/', include(project_structure_urls)),

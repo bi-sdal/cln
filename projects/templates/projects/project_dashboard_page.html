@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags staticfiles %}
+{% load wagtailcore_tags wagtailroutablepage_tags staticfiles %}
 
 {% block body_class %}template-projectsindexpage{% endblock %}
 
 {% block content %}
     <div class="jumbotron bg-dark text-light">
     <h1 class="display-4">{{ page.title }}</h1>
-    <p class="lead">{{ page.intro|richtext }}</p>
+    <div class="block edit-button">
+        <div id="intro" class="note-content lead">
+            {{ page.intro|richtext }}
+        </div>
+    </div>
     <hr class="my-4 text-light">
     <h6>
         <span class="glyphicon glyphicon-user"></span>
@@ -42,12 +46,13 @@
     </div>
     {% endcomment %}
 
-    <div id="modal" class="modal" tabindex="-1" role="dialog"></div>    
+    <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
+    <div id="modal-add-section" class="modal" tabindex="-1" role="dialog"></div>    
     
     <div class="row">
     <div class="col-9">
-        <h5><span>Project</span> Notes</h5>
-        {% for post in page.get_meetings %}
+        <h5><span>Project</span> Notes <a href="#" data-toggle="modal" data-target="#modal" title="Add Note"><span data-toggle="tooltip" data-placement="right" class="glyphicon glyphicon-plus" style="font-size: 10pt;"></span></a></h5>
+        {% for post in page.get_notes %}
 
         <div class="d-flex bg-light border border-dark p-2 mb-1">
             <img class="mr-3 thumbnail" src="{% static 'img/note-default.png' %}" alt="Generic placeholder image">
@@ -61,21 +66,20 @@
     </div>
     <div id="project-nav" class="col-3" style="top: -70px;">
     <div class="sticky-top">
-    <h5>Sections <a href="#" data-toggle="tooltip" data-placement="right" title="Add Section"><span class="glyphicon glyphicon-plus" style="font-size: 10pt;"></span></a></h5>
+    <h5>Sections <a href="#" data-toggle="modal" data-target="#modal-add-section" title="Add Section"><span data-toggle="tooltip" data-placement="right" class="glyphicon glyphicon-plus" style="font-size: 10pt;"></span></a></h5>
     <div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action active">Recent Notes</a>
-  <a href="#" class="list-group-item list-group-item-action">Meeting Notes</a>
-  <a href="#" class="list-group-item list-group-item-action">Literature Notes</a>
-  <a href="#" class="list-group-item list-group-item-action">Data Notes</a>
-  <a href="#" class="list-group-item list-group-item-action">Analysis Notes</a>
-  <a href="#" class="list-group-item list-group-item-action">Publication Notes</a>
+    <a href="#" class="list-group-item list-group-item-action active">Recent Notes</a>
+    {% for section in page.get_sections %}
+        <a href="{{section.url}}" class="list-group-item list-group-item-action">{{section}}</a>
+    {% endfor %}
     </div>
     <hr>
     <div class="list-group">
   <a href="#" class="list-group-item list-group-item-action">Citations</a>
   <a href="#" class="list-group-item list-group-item-action">Documents</a>
   <a href="#" class="list-group-item list-group-item-action">Files</a>
-  <a href="#" class="list-group-item list-group-item-action">Project Links</a>
+  <a href="#" class="list-group-item list-group-item-action">Links</a>
+  <a href="#" class="list-group-item list-group-item-action">Directory</a>
     </div>
     </div>
     </div>
@@ -88,25 +92,38 @@
 $('#modal').on('show.bs.modal', function (event) {
     var modal = $(this)
     $.ajax({
-        url: "{% url 'meeting-add' project=page.project_structure.pk pageId=page.pk %}",
+        url: "{% url 'add-list' pk=page.pk %}",
         context: document.body
     }).done(function(response) {
         modal.html(response);
     });
 });
 
-/*window.onscroll = function() {stick()};
-var nav = document.getElementById("project-nav");
-var sticky = nav.offsetTop;
-function stick() {
-  if (window.pageYOffset >= sticky) {
-    nav.classList.add("fixed-top");
-  } else {
-    nav.classList.remove("fixed-top");
-  }
-} 
-*/
+$('#modal-add-section').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    $.ajax({
+        url: "{% routablepageurl self 'addSection' %}",
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
 </script>
+<script type="text/javascript" >
+$('.edit-button').on('click', function (event) {
+    var disp = $(this).closest('.block').find('.note-content');
+    console.log(disp);
+    var fieldName = $(disp).attr('id');
+
+    $.ajax({
+        url: "{% routablepageurl self 'edit' %}" + fieldName,
+        context: document.body
+    }).done(function(response) {
+        disp.html(response);
+    });
+});
+</script>
+
 {% endblock %}
 
 {% block extra_css %}

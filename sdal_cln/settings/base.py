@@ -54,10 +54,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'django_pam',
 
     'django_extensions',
     'djangobower',
     'crispy_forms',
+    'publications_bootstrap',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +74,11 @@ MIDDLEWARE = [
 
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+  'django_pam.auth.backends.PAMBackend',
+  'django.contrib.auth.backends.ModelBackend',
 ]
 
 ROOT_URLCONF = 'sdal_cln.urls'

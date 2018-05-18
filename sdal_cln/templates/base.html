@@ -29,6 +29,12 @@
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}
         {% endblock %}
+        
+        {% block css %}
+        {% endblock%}
+        
+        {% block head %}
+        {% endblock %}
     </head>
 
     <body class="{% block body_class %}{% endblock %}">       
@@ -79,7 +85,7 @@
     <div class="row">
     <nav class="fixed-top col-md-2 d-none d-md-block bg-light sidebar side-nav">
           <div class="sidebar-sticky">
-          <h5>Welcome, {{user.first_name}}</h5>
+          <h5>Welcome, {{user}}</h5>
           {% block sidebar %}
             {% sidebar %}          
           {% endblock %}

@@ -3,6 +3,10 @@ from django.urls import reverse
 from django.forms import widgets
 from django.utils.timezone import now
 
+from django.conf import settings
+
+from publications_bootstrap.models import Publication as BiBEntry
+
 # Create your models here.
 
 class Researcher(models.Model):
@@ -20,9 +24,15 @@ class Researcher(models.Model):
         ],    
     )
     active = models.BooleanField(default=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)    
     
     def get_absolute_url(self):
         return reverse('researcher-detail', kwargs={'pk': self.pk})
+        
+    def get_projects(self):
+        Projects = self.project_set.all()
+        pages = [project.projectdashboardpage_set.first() for project in Projects]
+        return pages
         
     def short_name(self):
         return '{} {}'.format(first_name, last_name)
@@ -30,6 +40,11 @@ class Researcher(models.Model):
     def __str__(self):
         return '{} {}, {}'.format(self.first_name, self.last_name, self.degree)
 
+
+class Citation(BiBEntry):
+    
+    def long_cite(self):
+        return "{}. {}, {}.".format(self.authors, self.title, self.year)
         
 class Project(models.Model):
     title = models.CharField(max_length = 500)
@@ -38,6 +53,16 @@ class Project(models.Model):
     researchers = models.ManyToManyField(Researcher)
     git_repo = models.URLField(blank=True)
     shared_drive = models.URLField(blank=True)
+    citations = models.ManyToManyField(Citation, blank=True)
+
+    default_sections = [
+        'Meeting',
+        'Literature',
+        'Data',
+        'Analysis',
+        'Publication',
+        'Miscellaneous',    
+    ]
 
     def get_researchers(self):
         out = []
@@ -53,8 +78,9 @@ class Project(models.Model):
         
         
 class Meeting(models.Model):
+    title = models.CharField(max_length=200)
     project_attendees = models.ManyToManyField(Researcher, related_name='project_attendees')
-    prepared_by = models.ManyToManyField(Researcher, related_name='prepared_by')
+    prepared_by = models.ManyToManyField(Researcher, related_name='meeting_prepared_by')
     date = models.DateTimeField(default = now)
     project = models.ForeignKey(Project, on_delete=models.PROTECT, blank=True, null=True)
 
@@ -64,7 +90,54 @@ class Meeting(models.Model):
     def get_absolute_url(self):
         return reverse('meeting-detail', kwargs={'project': project.pk, 'pk': self.pk})
         
+
+class Literature(models.Model):
+    title = models.CharField(max_length=200)
+    prepared_by = models.ManyToManyField(Researcher, related_name='literature_prepared_by')
+    date = models.DateTimeField(default = now)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, blank=True, null=True)
+    citations = models.ManyToManyField(Citation, related_name='literature_citation')   
     
+    def get_absolute_url(self):
+        return reverse('literature-detail', kwargs={'project': project.pk, 'pk': self.pk})   
         
+
+class Data(models.Model):
+    title = models.CharField(max_length=200)
+    prepared_by = models.ManyToManyField(Researcher, related_name='data_prepared_by')
+    date = models.DateTimeField(default = now)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, blank=True, null=True)    
+    
+    def get_absolute_url(self):
+        return reverse('data-detail', kwargs={'project': project.pk, 'pk': self.pk})
         
+
+class Analysis(models.Model):
+    title = models.CharField(max_length=200)
+    prepared_by = models.ManyToManyField(Researcher, related_name='analysis_prepared_by')
+    date = models.DateTimeField(default = now)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, blank=True, null=True)    
+    
+    def get_absolute_url(self):
+        return reverse('analysis-detail', kwargs={'project': project.pk, 'pk': self.pk}) 
+        
+
+class Publication(models.Model):
+    title = models.CharField(max_length=200)
+    prepared_by = models.ManyToManyField(Researcher, related_name='publication_prepared_by')
+    date = models.DateTimeField(default = now)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, blank=True, null=True)    
+    
+    def get_absolute_url(self):
+        return reverse('publication-detail', kwargs={'project': project.pk, 'pk': self.pk})
+        
+
+class Misc(models.Model):
+    title = models.CharField(max_length=200)
+    prepared_by = models.ManyToManyField(Researcher, related_name='misc_prepared_by')
+    date = models.DateTimeField(default = now)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, blank=True, null=True)    
+    
+    def get_absolute_url(self):
+        return reverse('miscellaneous-detail', kwargs={'project': project.pk, 'pk': self.pk})       
         

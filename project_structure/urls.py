@@ -1,5 +1,6 @@
 from django.urls import path
 from project_structure.views import *
+from project_structure.import_bibtex import import_bibtex
 
 urlpatterns = [
     path(r'<int:project>/meeting/add/<int:pageId>', MeetingCreate.as_view(), name='meeting-add'),
@@ -7,6 +8,32 @@ urlpatterns = [
     path(r'<int:project>/meeting/<int:pk>/delete/', MeetingDelete.as_view(), name='meeting-delete'),
     path(r'<int:project>/meeting/<int:pk>/', MeetingDetail.as_view(), name='meeting-detail'),
     path(r'<int:project>/meetings/', MeetingList.as_view(), name='meeting-list'),
+    path(r'<int:project>/literature/add/<int:pageId>', LiteratureCreate.as_view(), name='literature-add'),
+    path(r'<int:project>/literature/add-citation/<int:pageId>', import_bibtex, name='literature-import-bibtex'),
+    path(r'<int:project>/literature/<int:pk>/', LiteratureUpdate.as_view(), name='literature-update'),
+    path(r'<int:project>/literature/<int:pk>/delete/', LiteratureDelete.as_view(), name='literature-delete'),
+    path(r'<int:project>/literature/<int:pk>/', LiteratureDetail.as_view(), name='literature-detail'),
+    path(r'<int:project>/literatures/', LiteratureList.as_view(), name='literature-list'),
+    path(r'<int:project>/data/add/<int:pageId>', DataCreate.as_view(), name='data-add'),
+    path(r'<int:project>/data/<int:pk>/', DataUpdate.as_view(), name='data-update'),
+    path(r'<int:project>/data/<int:pk>/delete/', DataDelete.as_view(), name='data-delete'),
+    path(r'<int:project>/data/<int:pk>/', DataDetail.as_view(), name='data-detail'),
+    path(r'<int:project>/datas/', DataList.as_view(), name='data-list'),
+    path(r'<int:project>/analysis/add/<int:pageId>', AnalysisCreate.as_view(), name='analysis-add'),
+    path(r'<int:project>/analysis/<int:pk>/', AnalysisUpdate.as_view(), name='analysis-update'),
+    path(r'<int:project>/analysis/<int:pk>/delete/', AnalysisDelete.as_view(), name='analysis-delete'),
+    path(r'<int:project>/analysis/<int:pk>/', AnalysisDetail.as_view(), name='analysis-detail'),
+    path(r'<int:project>/analyses/', AnalysisList.as_view(), name='analysis-list'),
+    path(r'<int:project>/publication/add/<int:pageId>', PublicationCreate.as_view(), name='publication-add'),
+    path(r'<int:project>/publication/<int:pk>/', PublicationUpdate.as_view(), name='publication-update'),
+    path(r'<int:project>/publication/<int:pk>/delete/', PublicationDelete.as_view(), name='publication-delete'),
+    path(r'<int:project>/publication/<int:pk>/', PublicationDetail.as_view(), name='publication-detail'),
+    path(r'<int:project>/publications/', PublicationList.as_view(), name='publication-list'),
+    path(r'<int:project>/misc/add/<int:pageId>', MiscCreate.as_view(), name='miscellaneous-add'),
+    path(r'<int:project>/misc/<int:pk>/', MiscUpdate.as_view(), name='miscellaneous-update'),
+    path(r'<int:project>/misc/<int:pk>/delete/', MiscDelete.as_view(), name='miscellaneous-delete'),
+    path(r'<int:project>/misc/<int:pk>/', MiscDetail.as_view(), name='miscellaneous-detail'),
+    path(r'<int:project>/miscs/', MiscList.as_view(), name='miscellaneous-list'),
     path(r'researcher/add/', ResearcherCreate.as_view(), name='researcher-add'),
     path(r'researcher/<int:pk>/', ResearcherUpdate.as_view(), name='researcher-update'),
     path(r'researcher/<int:pk>/delete/', ResearcherDelete.as_view(), name='researcher-delete'),
@@ -16,5 +43,7 @@ urlpatterns = [
     path(r'<int:pk>/', ProjectUpdate.as_view(), name='project-update'),
     path(r'<int:pk>/delete/', ProjectDelete.as_view(), name='project-delete'),
     path(r'<int:pk>/', ProjectDetail.as_view(), name='project-detail'),
+    path(r'add-list/<int:pk>/', NoteAdd.as_view(), name='add-list'),
+    path(r'add-citation/<int:project>/', import_bibtex, name='import-bibtex'),
     path(r'', ProjectList.as_view(), name='project-list'),
 ]

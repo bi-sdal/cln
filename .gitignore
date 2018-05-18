@@ -4,4 +4,4 @@
 *.pyc
 /node_modules/
 /components/
-db.sqlite3
+db.*
