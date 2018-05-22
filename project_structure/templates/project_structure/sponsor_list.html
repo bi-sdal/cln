@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Sponsors</h2>
+    <table class="table table-sm" summary="" >
+        {% for sponsor in object_list %}
+            <tr>
+                <td>{{ sponsor.first_name }} {{ sponsor.last_name }}</td>
+                <td>{{ sponsor.organization }}</td> 
+                <td>{{ sponsor.email }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

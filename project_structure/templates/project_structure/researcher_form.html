@@ -1,10 +1,27 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags crispy_forms_tags %}
 
 {% block content %}
+<h3>Research Profile</h3>
 <form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save" />
+    {{ form|crispy}}
+    <br>
+    <input type="submit" class="btn btn-primary" value="Save" />
 </form>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript" >
+        $('#id_user').change(function (e) {
+        	var username = $(this).children(':selected').text();
+        	var val = $(this).val();
+        	
+        	if (val != ""){
+        	   window.location = "{% url 'researcher-add' %}" + username;
+        	} else {
+        	   window.location = "{% url 'researcher-add' %}";
+        	}
+        })
+    </script>
 {% endblock %}

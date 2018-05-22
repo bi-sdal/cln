@@ -11,6 +11,7 @@ from publications_bootstrap.models import Publication as BiBEntry
 
 class Researcher(models.Model):
     first_name = models.CharField(max_length = 100)
+    middle_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
     website = models.URLField(blank=True)
     email = models.EmailField()
@@ -25,6 +26,8 @@ class Researcher(models.Model):
     )
     active = models.BooleanField(default=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)    
+
+    description = models.TextField(blank=True)    
     
     def get_absolute_url(self):
         return reverse('researcher-detail', kwargs={'pk': self.pk})
@@ -40,6 +43,22 @@ class Researcher(models.Model):
     def __str__(self):
         return '{} {}, {}'.format(self.first_name, self.last_name, self.degree)
 
+    
+class Sponsor(models.Model):
+    first_name = models.CharField(max_length = 100)
+    middle_name = models.CharField(max_length = 100)
+    last_name = models.CharField(max_length = 100)
+    title = models.CharField(max_length = 300, blank=True, verbose_name="Title in Organization")
+    organization = models.CharField(max_length=300, blank=True)
+    website = models.URLField(blank=True)
+    email = models.EmailField()
+    active = models.BooleanField(default=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)
+    org_description = models.TextField(blank=True, verbose_name="Organization Description")    
+    
+    def __str__(self):
+        return '{} {}, {}'.format(self.first_name, self.last_name)
+    
 
 class Citation(BiBEntry):
     
@@ -51,6 +70,7 @@ class Project(models.Model):
     acronym = models.CharField(max_length = 10)
     description = models.TextField(default='', blank=True)
     researchers = models.ManyToManyField(Researcher)
+    sponsors = models.ManyToManyField(Sponsor)
     git_repo = models.URLField(blank=True)
     shared_drive = models.URLField(blank=True)
     citations = models.ManyToManyField(Citation, blank=True)

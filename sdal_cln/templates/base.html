@@ -50,6 +50,20 @@
       <li class="nav-item">
         <a class="nav-link" href="{% slugurl 'projects' %}">Projects</a>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Researchers</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+           <a class="dropdown-item" href="{% url 'researcher-add' %}">Add Researcher</a>
+           <a class="dropdown-item" href="{% url 'researcher-list' %}">Show Researchers</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Sponsors</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+           <a class="dropdown-item" href="{% url 'sponsor-add' %}">Add Sponsor</a>
+           <a class="dropdown-item" href="{% url 'sponsor-list' %}">Show Sponsors</a>
+        </div>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="{% slugurl 'projects' %}">Directory</a>
       </li>

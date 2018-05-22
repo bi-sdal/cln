@@ -9,7 +9,7 @@
     <h1 class="display-4">{{ page.title }}</h1>
     <div class="block edit-button">
         <div id="intro" class="note-content lead">
-            {{ page.intro|richtext }}
+            {{page.intro|richtext }}
         </div>
     </div>
     <hr class="my-4 text-light">
@@ -25,26 +25,8 @@
         <span class="glyphicon glyphicon-globe"></span>
          {{page.project_structure.git_repo}}           
     </h6>
+    <p class="align-self-end"><a href="" >edit project</a> - <a href="" >add sponsor</a></p>
     </div>
-    
-    {% comment %}
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Project Options</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Add Notes</h6>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Meeting Note</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Literature Note</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Data Note</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Analysis Note</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-plus"></span><p>Publication Note</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Blank Note</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add Section</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add Link</p></button>
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-pencil"></span><p>Add File</p></button>
-            <p><a href="#" class="card-link">More Options</a></p>
-        </div>
-    </div>
-    {% endcomment %}
 
     <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
     <div id="modal-add-section" class="modal" tabindex="-1" role="dialog"></div>    

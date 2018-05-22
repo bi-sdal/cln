@@ -2,9 +2,12 @@
 
 {% block content %}
     <h2>Researchers</h2>
-    <ul>
+    <table class="table table-sm" summary="" >
         {% for researcher in object_list %}
-            <li>{{ researcher.first_name }} {{ researcher.last_name }} - {{ researcher.email }}</li>
+            <tr>
+                <td>{{ researcher.first_name }} {{ researcher.last_name }}</td> 
+                <td>{{ researcher.email }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}

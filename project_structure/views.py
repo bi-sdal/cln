@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
 from wagtail.core.models import Page
+from django.contrib.auth.models import User
 from project_structure.models import *
 from projects.models import *
 
@@ -21,16 +22,31 @@ class NoteAdd(TemplateView):
         return context 
     
 
+# Researcher Bits
 class ResearcherCreate(CreateView):
     model = Researcher
     fields = [
+        'user',
         'first_name', 
         'last_name',
         'degree',
         'email',
         'website',
-        'user',
+        'description',
         ]
+    success_url = reverse_lazy('research-list')
+    
+    def get_initial(self):
+        uid = self.kwargs.get('userId', None)
+        if (uid):
+            user = User.objects.get(username=uid)
+            return {
+                'user': user.pk,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+            }
+
 
 class ResearcherUpdate(UpdateView):
     model = Researcher
@@ -40,7 +56,7 @@ class ResearcherUpdate(UpdateView):
         'degree',
         'email',
         'website',
-        'user',
+        'description',
         ]
 
 class ResearcherDelete(DeleteView):
@@ -54,6 +70,46 @@ class ResearcherDetail(DetailView):
     
 class ResearcherList(ListView):
     model = Researcher
+
+
+#Sponsor Bits
+class SponsorCreate(CreateView):
+    model = Sponsor
+    fields = [
+        'user',
+        'first_name', 
+        'last_name',
+        'organization',
+        'title',
+        'email',
+        'website',
+        'org_description',
+        ]
+    success_url = reverse_lazy('sponsor-list')
+
+class SponsorUpdate(UpdateView):
+    model = Sponsor
+    fields = [
+        'first_name', 
+        'last_name',
+        'organization',
+        'title',
+        'email',
+        'website',
+        'org_description',
+        ]
+
+class SponsorDelete(DeleteView):
+    model = Sponsor
+    success_url = reverse_lazy('sponsor-list')
+    
+
+class SponsorDetail(DetailView):
+    model = Sponsor
+    context_object_name = 'sponsor'
+    
+class SponsorList(ListView):
+    model = Sponsor
 
 
 # Project Views    

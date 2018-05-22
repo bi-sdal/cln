@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls import include, url
+from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.views import logout
 from wagtail.admin import urls as wagtailadmin_urls
@@ -22,6 +23,7 @@ urlpatterns = [
     url(r'^search/$', search_views.search, name='search'),
     url(r'^logout/$', logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
     url(r'^login/$', home_views.login_redirect, name='login'),
+    path(r'update/<int:pk>/', home_views.UpdateProfile.as_view(), name='update-profile'),
     url(r'^$', home_views.login_redirect, name='index'),
 
     # For anything not caught by a more specific rule above, hand over to
