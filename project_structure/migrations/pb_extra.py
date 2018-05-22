@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='publication',
+            model_name='publications_bootstrap.publication',
             name='type',
             field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='publications_bootstrap.Type'),
         ),
