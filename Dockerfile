@@ -4,8 +4,8 @@ LABEL maintainer="Brian Goode <bjgoode.vt.edu>"
 RUN yum -y update
 
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_ENV dev
-ENV DJANGO_SETTINGS_MODULE sdal_cln.settings.production
+#ENV DJANGO_ENV dev
+#ENV DJANGO_SETTINGS_MODULE sdal_cln.settings.production
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -34,7 +34,7 @@ RUN chown django:django /home/django
 USER django
 
 RUN python3.6 manage.py bower install
-RUN python3.6 manage.py migrate
+#RUN python3.6 manage.py migrate
 
 EXPOSE 8000
-CMD exec gunicorn sdal_cln.wsgi:application --bind 0.0.0.0:8000 --workers 3
+#CMD exec gunicorn sdal_cln.wsgi:application --bind 0.0.0.0:8000 --workers 3
