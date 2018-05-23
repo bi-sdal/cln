@@ -11,6 +11,14 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sdal_cln.settings.dev")
+import environ
+
+root = environ.Path(__file__) - 2
+env = environ.Env()
+env.read_env(root('.env'))
+
+#os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sdal_cln.settings.dev")
+#os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sdal_cln.settings.production")
+env('DJANGO_SETTINGS_MODULE', default="sdal_cln.settings.dev")
 
 application = get_wsgi_application()

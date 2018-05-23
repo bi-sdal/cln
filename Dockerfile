@@ -5,6 +5,7 @@ RUN yum -y update
 
 ENV PYTHONUNBUFFERED 1
 ENV DJANGO_ENV dev
+ENV DJANGO_SETTINGS_MODULE sdal_cln.settings.production
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en

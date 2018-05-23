@@ -1,6 +1,26 @@
 from .base import *
+import os
+import environ
 
-DEBUG = False
+root = environ.Path(__file__) - 3
+env = environ.Env()
+env.read_env(root('.env'))
+
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG') == 'True'
+print(DEBUG)
+
+print ('USING PRODUCTION')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'localhost',
+        'PORT': 5434,
+    }
+}
 
 try:
     from .local import *
