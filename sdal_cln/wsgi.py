@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
-
+from whitenoise.django import DjangoWhiteNoise
 import environ
 
 root = environ.Path(__file__) - 2
@@ -22,3 +22,4 @@ env.read_env(root('.env'))
 env('DJANGO_SETTINGS_MODULE', default="sdal_cln.settings.dev")
 
 application = get_wsgi_application()
+application = DjangoWhiteNoise(application)

@@ -69,5 +69,6 @@ wagtail==2.0
 wagtail-extras==0.2.1
 wcwidth==0.1.7
 webencodings==0.5.1
+whitenoise==3.3.1
 widgetsnbextension==3.1.4
 Willow==1.1
