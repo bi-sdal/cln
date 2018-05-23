@@ -25,16 +25,10 @@ RUN pip3.6 install --upgrade pip && \
     pip3.6 install -r requirements.txt && \
     pip3.6 install gunicorn
 
-RUN python3.6 manage.py migrate && \
-    useradd wagtail && \
-    chown -R wagtail /code
-
-RUN npm install bower && \
-    ln -s /usr/bin/nodejs /usr/bin/node
+RUN npm install bower 
 
 RUN useradd django
 RUN chown -R django:django /code
-RUN mkdir /home/django
 RUN chown django:django /home/django
 USER django
 
