@@ -181,6 +181,10 @@ BOWER_INSTALLED_APPS = [
 ]
 BOWER_PATH = os.path.join(BASE_DIR, 'node_modules/bower/bin/bower')
 
+MIGRATION_MODULES = {
+    'publications_bootstrap': 'project_structure.pb_migrations',
+}
+
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "SDAL CLN"
