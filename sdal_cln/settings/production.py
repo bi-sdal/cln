@@ -12,6 +12,8 @@ print(DEBUG)
 
 print ('USING PRODUCTION')
 
+ALLOWED_HOSTS = ['*']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
