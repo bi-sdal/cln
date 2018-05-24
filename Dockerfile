@@ -27,14 +27,15 @@ RUN pip3.6 install --upgrade pip && \
     pip3.6 install -r requirements.txt && \
     pip3.6 install gunicorn
 
-RUN npm install bower 
+RUN npm install bower
 
 RUN useradd django
 RUN chown -R django:django /code
 RUN chown django:django /home/django
-USER django
+RUN usermod -aG wheel django
+#USER django
 
-RUN python3.6 manage.py bower install
+#RUN python3.6 manage.py bower install
 #RUN python3.6 manage.py migrate
 
 EXPOSE 8000
