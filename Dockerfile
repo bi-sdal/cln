@@ -1,7 +1,8 @@
 FROM sdal/c7sd_auth
 LABEL maintainer="Brian Goode <bjgoode.vt.edu>"
 
-RUN yum -y update
+RUN yum -y update && \
+    yum -y install emacs nano vim
 
 ENV PYTHONUNBUFFERED 1
 #ENV DJANGO_ENV dev
