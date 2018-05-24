@@ -34,7 +34,7 @@ class ResearcherCreate(CreateView):
         'website',
         'description',
         ]
-    success_url = reverse_lazy('research-list')
+    success_url = reverse_lazy('researcher-list')
     
     def get_initial(self):
         uid = self.kwargs.get('userId', None)
@@ -198,7 +198,7 @@ class MeetingList(ListView):
 # Literature Views
 class LiteratureCreate(CreateView):
     model = Literature
-    fields = ['title', 'citations']   
+    fields = ['title']   
             
     def form_valid(self, form):
         projectId = self.kwargs['project']
@@ -206,6 +206,7 @@ class LiteratureCreate(CreateView):
         
         self.object = form.save()
         self.object.project = project
+        self.object.prepared_by = Researcher.objects.get(user=self.request.user)
         self.object.save()
         
         page = ProjectLiteraturePage(title=self.object.title, literature_structure=self.object)
