@@ -206,7 +206,7 @@ class LiteratureCreate(CreateView):
         
         self.object = form.save()
         self.object.project = project
-        self.object.prepared_by = Researcher.objects.get(user=self.request.user)
+        self.object.prepared_by.add(Researcher.objects.get(user=self.request.user))
         self.object.save()
         
         page = ProjectLiteraturePage(title=self.object.title, literature_structure=self.object)
