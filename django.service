@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After= network.target
+
+[Service]
+Restart=on-failure
+WorkingDirectory=/code
+ExecStart=/code/start_django.sh
+
+[Install]
+WantedBy=multi-user.target
+

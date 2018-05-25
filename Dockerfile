@@ -22,7 +22,6 @@ RUN yum -y install https://centos7.iuscommunity.org/ius-release.rpm && \
 COPY . /code/
 WORKDIR /code/
 
-#COPY ./requirements.txt /code/requirements.txt
 RUN pip3.6 install --upgrade pip && \
     pip3.6 install -r requirements.txt && \
     pip3.6 install gunicorn
@@ -35,8 +34,15 @@ RUN chown django:django /home/django
 RUN usermod -aG wheel django
 #USER django
 
+RUN mv django.service /etc/systemd/system
+RUN systemctl enable django
+
+RUN chmod +x start_django.sh
+
 #RUN python3.6 manage.py bower install
 #RUN python3.6 manage.py migrate
+#RUN python3.6 manage.py collectstatic
 
 EXPOSE 8000
+CMD ["/usr/sbin/init"]
 #CMD exec gunicorn sdal_cln.wsgi:application --bind 0.0.0.0:8000 --workers 3
