@@ -92,17 +92,21 @@ $('#modal-add-section').on('show.bs.modal', function (event) {
 });
 </script>
 <script type="text/javascript" >
+var edit_nonactive = true;
 $('.edit-button').on('click', function (event) {
     var disp = $(this).closest('.block').find('.note-content');
     console.log(disp);
     var fieldName = $(disp).attr('id');
-
+    
+    if(edit_nonactive){
+    edit_nonactive = false;
     $.ajax({
         url: "{% routablepageurl self 'edit' %}" + fieldName,
         context: document.body
     }).done(function(response) {
         disp.html(response);
     });
+    }
 });
 </script>
 
