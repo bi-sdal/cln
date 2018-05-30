@@ -43,7 +43,7 @@
     {% endcomment %}
 
     <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
-    <div id="modal-add-section" class="modal" tabindex="-1" role="dialog"></div>    
+    <div id="modal-add-section" class="modal" tabindex="-1" role="dialog"></div>
     
     <div class="row">
     <div class="col-9">
@@ -64,6 +64,7 @@
     <div class="sticky-top">
     <h5>Sections <a href="#" data-toggle="modal" data-target="#modal-add-section" title="Add Section"><span data-toggle="tooltip" data-placement="right" class="glyphicon glyphicon-plus" style="font-size: 10pt;"></span></a></h5>
     <div class="list-group">
+    <a href="{{page.get_parent.url}}" class="list-group-item list-group-item-action bg-outline-primary">{{page.get_parent.title}}</a>
     <a href="#" class="list-group-item list-group-item-action active">Recent Notes</a>
     {% for section in page.get_sections %}
         <a href="{{section.url}}" class="list-group-item list-group-item-action">{{section}}</a>
@@ -104,7 +105,6 @@ $('#modal-add-section').on('show.bs.modal', function (event) {
         modal.html(response);
     });
 });
-
 
 </script>
 {% endblock %}

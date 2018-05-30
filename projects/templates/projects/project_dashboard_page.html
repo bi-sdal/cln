@@ -25,11 +25,12 @@
         <span class="glyphicon glyphicon-globe"></span>
          {{page.project_structure.git_repo}}           
     </h6>
-    <p class="align-self-end"><a href="" >edit project</a> - <a href="" >add sponsor</a></p>
+    <p class="align-self-end"><a class="btn btn-outline-primary p-0 pl-1 pr-1" href="" data-toggle="modal" data-target="#modal-edit-project" >edit project</a> - <a href="" >add sponsor</a></p>
     </div>
 
     <div id="modal" class="modal" tabindex="-1" role="dialog"></div>
-    <div id="modal-add-section" class="modal" tabindex="-1" role="dialog"></div>    
+    <div id="modal-add-section" class="modal" tabindex="-1" role="dialog"></div> 
+    <div id="modal-edit-project" class="modal" tabindex="-1" role="dialog"></div>   
     
     <div class="row">
     <div class="col-9">
@@ -90,6 +91,17 @@ $('#modal-add-section').on('show.bs.modal', function (event) {
         modal.html(response);
     });
 });
+
+$('#modal-edit-project').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    $.ajax({
+        url: "{% url 'project-update' pk=page.project_structure.id %}",
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+});
+
 </script>
 <script type="text/javascript" >
 var edit_nonactive = true;

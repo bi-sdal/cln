@@ -141,6 +141,21 @@ class ProjectCreate(CreateView):
 class ProjectUpdate(UpdateView):
     model = Project
     fields = '__all__'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update'] = True
+        return context 
+    
+    def form_valid(self, form):
+        self.object = form.save()
+
+        page = self.object.projectdashboardpage_set.first()
+        page.title = form.cleaned_data['title']
+        page.save_revision().publish()       
+            
+        return HttpResponseRedirect(page.url)
+    
 
 class ProjectDelete(DeleteView):
     model = Project
