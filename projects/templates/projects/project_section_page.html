@@ -99,7 +99,7 @@ $('#modal').on('show.bs.modal', function (event) {
 $('#modal-add-section').on('show.bs.modal', function (event) {
     var modal = $(this)
     $.ajax({
-        url: "",
+        url: "{% routablepageurl self 'addSection' %}",
         context: document.body
     }).done(function(response) {
         modal.html(response);

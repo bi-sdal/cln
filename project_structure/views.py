@@ -262,6 +262,7 @@ class DataCreate(CreateView):
         
         self.object = form.save()
         self.object.project = project
+        self.object.prepared_by.add(Researcher.objects.get(user=self.request.user))
         self.object.save()
         
         page = ProjectDataPage(title=self.object.title, data_structure=self.object)
@@ -302,6 +303,7 @@ class AnalysisCreate(CreateView):
         
         self.object = form.save()
         self.object.project = project
+        self.object.prepared_by.add(Researcher.objects.get(user=self.request.user))
         self.object.save()
         
         page = ProjectAnalysisPage(title=self.object.title, analysis_structure=self.object)
@@ -342,6 +344,7 @@ class PublicationCreate(CreateView):
         
         self.object = form.save()
         self.object.project = project
+        self.object.prepared_by.add(Researcher.objects.get(user=self.request.user))
         self.object.save()
         
         page = ProjectPublicationPage(title=self.object.title, publication_structure=self.object)
@@ -382,6 +385,7 @@ class MiscCreate(CreateView):
         
         self.object = form.save()
         self.object.project = project
+        self.object.prepared_by.add(Researcher.objects.get(user=self.request.user))
         self.object.save()
         
         page = ProjectMiscPage(title=self.object.title, misc_structure=self.object)
@@ -393,6 +397,14 @@ class MiscCreate(CreateView):
         page.save_revision().publish() 
 
         return HttpResponseRedirect(page.url)
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context['view'])
+        section = ProjectSectionPage.objects.get(pk=context['view'].kwargs['pageId'])        
+        
+        context['section_name'] = section.section_name
+        return context 
 
 
 class MiscUpdate(UpdateView):
