@@ -6,7 +6,7 @@
 {% block content %}
     <div class="note-body bg-light p-3 border border-dark">
     <h1>{{ page.title }}</h1>
-    <h5>Prepared by: {% for preparor in page.literature_structure.prepared_by.all %} {{preparor}}{% endfor %}</h5>
+    <h5>Prepared by: {% for preparor in page.analysis_structure.prepared_by.all %} {{preparor}}{% endfor %}</h5>
     <div class="intro block">
         <h6>Summary 
             <button type="button" class="btn edit-button" data-dismiss="modal" aria-label="Edit">
@@ -16,20 +16,15 @@
         <div id="intro" class="note-content">
             {{ page.intro|richtext }}
         </div>
-        <h6>Citations Included 
-            <button type="button" class="btn edit-button" data-dismiss="modal" aria-label="Edit">
-                <span class="glyphicon glyphicon-pencil edit-button"></span>
-            </button>
-        </h6>
     </div>
-    <div class="main-literature block bottom">
-        <h6>Literature Note
+    <div class="main-analysis block bottom">
+        <h6>Analysis Note
             <button type="button" class="btn edit-button" data-dismiss="modal" aria-label="Edit">
                 <span class="glyphicon glyphicon-pencil edit-button"></span>
             </button>
         </h6>
-        <div id="literature_notes" class="note-content">
-            {{ page.literature_notes|richtext }}
+        <div id="analysis_notes" class="note-content">
+            {{ page.analysis_notes|richtext }}
         </div>
     </div>
     <p>Last Update: {{page.last_published_at|date:'Y-m-d H:i' }}<p>

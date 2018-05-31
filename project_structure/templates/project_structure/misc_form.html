@@ -1,10 +1,10 @@
 {% load crispy_forms_tags %}
 
 <div class="modal-dialog" role="document">
-    <form id="addForm" action="{% url 'meeting-add' project=view.kwargs.project pageId=view.kwargs.pageId %}" method="post">{% csrf_token %}
+    <form id="addForm" action="{% url 'miscellaneous-add' project=view.kwargs.project pageId=view.kwargs.pageId %}" method="post">{% csrf_token %}
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Create Meeting Note</h5>
+        <h5 class="modal-title">Create {{section_name}} Note</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

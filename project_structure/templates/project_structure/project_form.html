@@ -1,7 +1,11 @@
 {% load crispy_forms_tags %}
 
 <div class="modal-dialog" role="document">
-    <form id="addForm" action="{% url 'project-add' pageId=view.kwargs.pageId %}" method="post">{% csrf_token %}
+    {% if update %}
+        <form id="addForm" action="{% url 'project-update' pk=view.kwargs.pk %}" method="post">{% csrf_token %}
+    {% else %}
+        <form id="addForm" action="{% url 'project-add' pageId=view.kwargs.pageId %}" method="post">{% csrf_token %}
+    {% endif %}    
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Create New Project</h5>

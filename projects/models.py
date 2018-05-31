@@ -41,7 +41,7 @@ class ProjectDashboardPage(RoutablePageMixin, Page):
         return ProjectNotePage.objects.live().descendant_of(self).specific().order_by('-last_published_at')
 
     def get_sections(self):
-        return ProjectSectionPage.objects.live().descendant_of(self).specific().order_by('last_published_at')    
+        return ProjectSectionPage.objects.live().child_of(self).specific().order_by('last_published_at')    
         
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname="full"),
@@ -68,7 +68,7 @@ DEFAULT_SECTIONS = [
     'publication',
 ]
 
-class ProjectSectionPage(Page):
+class ProjectSectionPage(RoutablePageMixin, Page):
 
     section_name = models.CharField(max_length=100)    
     content_panels = Page.content_panels
@@ -78,6 +78,9 @@ class ProjectSectionPage(Page):
 
     def get_notes(self):
         return ProjectNotePage.objects.live().descendant_of(self).specific().order_by('-last_published_at')
+        
+    def get_sections(self):
+        return ProjectSectionPage.objects.live().child_of(self).specific().order_by('last_published_at') 
         
     def add_note_url(self):
         if self.section_name.lower() not in DEFAULT_SECTIONS:

@@ -70,7 +70,7 @@ class Project(models.Model):
     acronym = models.CharField(max_length = 10)
     description = models.TextField(default='', blank=True)
     researchers = models.ManyToManyField(Researcher)
-    sponsors = models.ManyToManyField(Sponsor)
+    sponsors = models.ManyToManyField(Sponsor, blank=True)
     git_repo = models.URLField(blank=True)
     shared_drive = models.URLField(blank=True)
     citations = models.ManyToManyField(Citation, blank=True)
