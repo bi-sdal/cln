@@ -65,7 +65,7 @@ tornado==5.0.1
 traitlets==4.3.2
 Unidecode==0.4.21
 urllib3==1.22
-wagtail==2.0
+wagtail==2.7.2
 wagtail-extras==0.2.1
 wcwidth==0.1.7
 webencodings==0.5.1
